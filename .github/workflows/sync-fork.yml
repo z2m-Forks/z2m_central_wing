@@ -1,0 +1,31 @@
+name: Sync upstream fork
+
+# Этот workflow синхронизирует форк с оригинальным репозиторием.
+# Он будет ежедневно скачивать новые коммиты из ветки master
+# репозитория zigbee2mqtt/hassio-zigbee2mqtt и автоматически
+# мерджить их в ветку master вашего форка. Запуск можно
+# инициировать вручную через "Workflow dispatch".
+
+on:
+  # Запуск по расписанию. Время указано в формате cron на UTC.
+  # Здесь ежедневно в 01:00 UTC (04:00 по Киеву летом).
+  schedule:
+    - cron: '0 1 * * *'
+  # Позволяет запустить workflow вручную из интерфейса GitHub.
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync and merge upstream repository with your current repository
+        uses: dabreadman/sync-upstream-repo@v1.3.0
+        with:
+          # URL исходного репозитория для синхронизации.
+          upstream_repo: https://github.com/zigbee2mqtt/hassio-zigbee2mqtt.git
+          # Ветка в исходном репозитории, которую синхронизируем (master)
+          upstream_branch: master
+          # Ветка в вашем форке, в которую будут мерджиться изменения (master)
+          downstream_branch: master
+          # Токен для аутентификации. secrets.GITHUB_TOKEN предоставляется GitHub автоматически.
+          token: ${{ secrets.GITHUB_TOKEN }}
