@@ -1,0 +1,19 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    # ежедневно в 01:00 по UTC (04:00 по Киеву летом; корректируйте при необходимости)
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync and merge upstream repository with your current repository
+        uses: dabreadman/sync-upstream-repo@v1.3.0
+        with:
+          upstream_repo: https://github.com/ORIGINAL-OWNER/ORIGINAL-REPOSITORY.git
+          upstream_branch: master
+          downstream_branch: master
+          token: ${{ secrets.GITHUB_TOKEN }}
